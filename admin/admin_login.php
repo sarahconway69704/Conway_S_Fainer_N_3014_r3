@@ -9,7 +9,7 @@
 
         if(!empty($username) && !empty($password)){
             //Log user in
-            $message = login($username, $password, $ip);
+            $message = login($username, $password, $ip, $suspend);
         }else{
             $message = 'Please fill out the required field';
         }
