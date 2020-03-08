@@ -50,6 +50,9 @@ function login($username, $password, $ip, $suspend){
 
         if(isset($id)){
 
+            // if the edit user column is empty (ie 0) then the following query will return nothin
+            // if the edit user column is 1 then the query will return results
+
             $edited = 1;
 
             $check_edit_query = 'SELECT * FROM tbl_user WHERE user_id =:id AND user_edit =:edited';
@@ -61,11 +64,16 @@ function login($username, $password, $ip, $suspend){
                 )
             );
 
+            // if the results are returned then the while loop is true
+
             while($row = $check_edit->fetch(PDO::FETCH_ASSOC)){
 
                 redirect_to('index.php');
                 
             }
+
+            // if the results are not returned it breaks the while loop immediately and the 
+            // user is sent to edit their account
                 redirect_to('admin_edituser.php');
         }
     }else{
