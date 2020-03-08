@@ -1,11 +1,12 @@
 <?php 
+ confirm_logged_in();
 function createUser($fname, $username, $password, $email){
     $pdo = Database::getInstance()->getConnection();
-    
+    //$user_suspend = 1;
     //TODO: finish the below so that it can run a SQL query
     // to create a new user with provided data
-    $create_user_query = 'INSERT INTO tbl_user(user_fname, user_name, user_pass, user_email, user_ip)';
-    $create_user_query .= ' VALUES(:fname, :username, :password, :email, "no" )';
+    $create_user_query = 'INSERT INTO tbl_user(user_fname, user_name, user_pass, user_email, user_ip, user_edit, user_suspend)';
+    $create_user_query .= ' VALUES(:fname, :username, :password, :email, "no", 0, 0 )';
 
     $create_user_set = $pdo->prepare($create_user_query);
     $create_user_result = $create_user_set->execute(
@@ -13,16 +14,34 @@ function createUser($fname, $username, $password, $email){
             ':fname'=>$fname,
             ':username'=>$username,
             ':password'=>$password,
-            ':email'=>$email,
+            ':email'=>$email
+            //':suspend'=>$user_suspend
         )
     );
     //TODO: redirect to index.php if creat user successfully
     // otherwise, return a error message
     if($create_user_result){
         redirect_to('index.php');
+        
     }else{
         return 'The user did not go through';
     }
+}
+
+function timer($id, $suspend){
+    //sleep(20);
+    $suspend = 1;
+    $pdo = Database::getInstance()->getConnection();
+    $timer_user_query = 'UPDATE tbl_user SET user_id =:id, user_suspend =:suspend';
+    $timer_user_set = $pdo->prepare($timer_user_query);
+    $timer_user_result = $timer_user_set->execute(
+        array(
+            ':id'=>$id,
+            ':suspend'=>$suspend        
+            
+        )
+    );
+    
 }
 
 function getSingleUser($id){
