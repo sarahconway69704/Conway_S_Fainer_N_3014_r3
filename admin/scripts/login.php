@@ -43,7 +43,24 @@ function login($username, $password, $ip){
         }
 
         if(isset($id)){
-            redirect_to('index.php');
+
+            $edited = 1;
+
+            $check_edit_query = 'SELECT * FROM tbl_user WHERE user_id =:id AND user_edit =:edited';
+            $check_edit = $pdo->prepare($check_edit_query);
+            $check_edit_result = $check_edit->execute(
+                array(
+                    ':id'=>$id,
+                    ':edited'=>$edited
+                )
+            );
+
+            while($row = $check_edit->fetch(PDO::FETCH_ASSOC)){
+
+                redirect_to('index.php');
+                
+            }
+                redirect_to('admin_edituser.php');
         }
     }else{
         //User does not exist
