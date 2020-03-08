@@ -16,6 +16,7 @@
         $email = trim($_POST['email']);
 
         $message = editUser($id, $fname, $username, $password, $email);
+        
     }
 ?>
 <!DOCTYPE html>

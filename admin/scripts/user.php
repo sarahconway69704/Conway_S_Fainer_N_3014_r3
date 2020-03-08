@@ -46,12 +46,14 @@ function getSingleUser($id){
 }
 
 function editUser($id, $fname, $username, $password, $email){
+
+    $edited_user = 1;
     //TODO: set up database connection
     $pdo = Database::getInstance()->getConnection();
 
     //TODO: Run the proper SQL query to update tbl_user with proper values
     $update_user_query = 'UPDATE tbl_user SET user_fname = :fname, user_name = :username,';
-    $update_user_query .= ' user_pass=:password, user_email =:email WHERE user_id = :id';
+    $update_user_query .= ' user_pass=:password, user_email =:email, user_edit =:edited WHERE user_id = :id';
     $update_user_set = $pdo->prepare($update_user_query);
     $update_user_result = $update_user_set->execute(
         array(
@@ -59,6 +61,7 @@ function editUser($id, $fname, $username, $password, $email){
             ':username'=>$username,
             ':password'=>$password,
             ':email'=>$email,
+            ':edited'=>$edited_user,
             ':id'=>$id
         )
     );
