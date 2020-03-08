@@ -12,6 +12,7 @@ if(isset($_POST['submit'])){
         $message = 'Please fill the required fields';
     }else{
         $message = createUser($fname, $username, $password, $email);
+        //timer($id, $suspend);
     }
 }
 

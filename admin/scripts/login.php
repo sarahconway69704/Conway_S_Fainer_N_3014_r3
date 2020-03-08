@@ -1,15 +1,21 @@
 <?php 
-
-function login($username, $password, $ip){
+$suspend = 0;
+function login($username, $password, $ip, $suspend){
     $pdo = Database::getInstance()->getConnection();
     //Check existance
-    $check_exist_query = 'SELECT COUNT(*) FROM tbl_user WHERE user_name= :username';
+    $check_exist_query = 'SELECT COUNT(*) FROM tbl_user WHERE user_name= :username AND user_suspend = :suspend';
     $user_set = $pdo->prepare($check_exist_query);
     $user_set->execute(
         array(
             ':username' => $username,
+            ':suspend'=>$suspend
         )
     );
+
+    if($suspend == 1){
+        return 'User is suspended';
+        
+    }else{
 
     if($user_set->fetchColumn()>0){
         //Log user in
@@ -63,12 +69,11 @@ function login($username, $password, $ip){
                 redirect_to('admin_edituser.php');
         }
     }else{
-        //User does not exist
         $message = 'User does not exist';
     }
+    
 
-
-
+    }
     return $message;
 }
 
