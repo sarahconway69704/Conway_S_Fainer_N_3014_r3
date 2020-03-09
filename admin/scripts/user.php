@@ -85,6 +85,8 @@ function editUser($id, $fname, $username, $password, $email){
             ':edited'=>$edited_user,
             ':id'=>$id
         )
+
+        // add number 1 to user_edit column if the user submits an edit
     );
 
     // echo $update_user_set->debugDumpParams();
