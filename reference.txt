@@ -1,0 +1,2 @@
+﻿https://www.mysqltutorial.org/mysql-now/
+https://stackoverflow.com/questions/3887509/mysqls-now-1-day

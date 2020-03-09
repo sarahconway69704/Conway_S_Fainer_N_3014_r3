@@ -1,19 +1,37 @@
 <?php 
-$suspend = 0;
-function login($username, $password, $ip, $suspend){
+
+function login($username, $password, $ip, $timelimit){
     $pdo = Database::getInstance()->getConnection();
     //Check existance
-    $check_exist_query = 'SELECT COUNT(*) FROM tbl_user WHERE user_name= :username AND user_suspend = :suspend';
+    $check_exist_query = 'SELECT COUNT(*) FROM tbl_user WHERE user_name= :username';
     $user_set = $pdo->prepare($check_exist_query);
     $user_set->execute(
         array(
             ':username' => $username,
-            ':suspend'=>$suspend
         )
     );
 
-    if($suspend == 1){
-        return 'User is suspended';
+    // fetch the timestamp that is a day ahead to use as a time limit
+    $time_user_query = 'SELECT * FROM tbl_user WHERE user_time = :timelimit';
+    $time_user_check = $pdo->prepare($time_user_query);
+    $time_user_check->execute(
+    array(
+        ':timelimit'=>$timelimit
+    )
+);
+
+    // establish timezone
+    date_default_timezone_set('America/Toronto');
+    // define current date and time
+    $now = date("Y-m-d H:i:s");
+    // this variable is used as a placeholder to have everything work
+    // without it, an undefined variable error comes up when attempting to log in
+    $timelimit = date("Y-m-d H:i:s");
+ 
+    // If the current time is greater than the timelimit established (a day from when account was created)
+    // suspend user, else log in normally
+    if($now > $timelimit){
+        $message = 'user suspended';
         
     }else{
 

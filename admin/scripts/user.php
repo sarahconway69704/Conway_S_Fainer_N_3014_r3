@@ -3,10 +3,10 @@
 function createUser($fname, $username, $password, $email){
     $pdo = Database::getInstance()->getConnection();
     $user_suspend = 1;
-    //TODO: finish the below so that it can run a SQL query
-    // to create a new user with provided data
-    $create_user_query = 'INSERT INTO tbl_user(user_fname, user_name, user_pass, user_email, user_ip, user_edit, user_suspend)';
-    $create_user_query .= ' VALUES(:fname, :username, :password, :email, "no", 0, :suspend )';
+   
+    //Use the timestamp (user_time) column and fill it with the time of one day from when they created their account
+    $create_user_query = 'INSERT INTO tbl_user(user_fname, user_name, user_pass, user_email, user_ip, user_edit, user_time)';
+    $create_user_query .= ' VALUES(:fname, :username, :password, :email, "no", 0, NOW() + INTERVAL 1 DAY )';
 
     $create_user_set = $pdo->prepare($create_user_query);
     $create_user_result = $create_user_set->execute(
@@ -15,7 +15,6 @@ function createUser($fname, $username, $password, $email){
             ':username'=>$username,
             ':password'=>$password,
             ':email'=>$email,
-            ':suspend'=>$user_suspend
         )
     );
     //TODO: redirect to index.php if creat user successfully
@@ -29,22 +28,6 @@ function createUser($fname, $username, $password, $email){
     }
 }
 
-//function timer($id, $suspend){
-    //sleep(20);
-    //$suspend = 1;
-    //$pdo = Database::getInstance()->getConnection();
-    //$timer_user_query = 'INSERT INTO tbl_user(user_id, user_suspend)';
-    //$timer_user_query .= ' VALUES(:id, :suspend)';
-    //$timer_user_set = $pdo->prepare($timer_user_query);
-    //$timer_user_result = $timer_user_set->execute(
-        //array(
-            //':id'=>$id,
-            //':suspend'=>$suspend        
-            
-        //)
-    //);
-    
-//}
 
 function getSingleUser($id){
     $pdo = Database::getInstance()->getConnection();
